@@ -1,0 +1,40 @@
+name: 'Build and Release'
+
+on:
+  push
+
+env:
+  CSI_PROXY_VERSION: 'v1.0.1'
+
+jobs:
+  create_release:
+    runs-on: 'ubuntu-20.04'
+    name: 'Create Release'
+    steps:
+      - name: 'set TAG_NAME'
+        run: |
+          GITHUB_BRANCH=${GITHUB_REF##*/}
+          if [ GITHUB_BRANCH == 'main' ]; then
+            TAG_NAME=${{ env.CSI_PROXY_VERSION }};
+          else
+            TAG_NAME=$GITHUB_BRANCH-${{ env.CSI_PROXY_VERSION }};
+          fi
+          echo "TAG_NAME=$TAG_NAME"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+      - uses: 'actions/checkout@v2.3.4'
+        with:
+          repository: 'kubernetes-csi/csi-proxy'
+          ref: '${{ env.CSI_PROXY_VERSION }}'
+          fetch-depth: 0
+      - name: 'build csi-proxy'
+        run: |
+          docker run --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp golang:1.16 make build
+          ls
+          pwd
+      - name: 'Create a GitHub release'
+        uses: 'softprops/action-gh-release@v0.1.13'
+        env:
+          GITHUB_TOKEN: '${{ secrets.REPO_ONLY }}'
+        with:
+          tag_name: '${{ env.TAG_NAME }}'
+          files: '/home/runner/work/csi-proxy-builder/csi-proxy-builder/bin/csi-proxy.exe'
