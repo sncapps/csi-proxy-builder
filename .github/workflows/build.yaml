@@ -21,7 +21,7 @@ jobs:
           fi
           echo "TAG_NAME=$TAG_NAME"
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-      - uses: 'actions/checkout@f0bb91606209742fe3ea40199be2f3ef195ecabf'
+      - uses: 'actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579'
         with:
           repository: 'kubernetes-csi/csi-proxy'
           ref: '${{ env.CSI_PROXY_VERSION }}'
