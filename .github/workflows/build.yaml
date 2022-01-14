@@ -21,7 +21,7 @@ jobs:
           fi
           echo "TAG_NAME=$TAG_NAME"
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-      - uses: 'actions/checkout@v2.3.4'
+      - uses: 'actions/checkout@f0bb91606209742fe3ea40199be2f3ef195ecabf'
         with:
           repository: 'kubernetes-csi/csi-proxy'
           ref: '${{ env.CSI_PROXY_VERSION }}'
@@ -32,7 +32,7 @@ jobs:
           ls
           pwd
       - name: 'Create a GitHub release'
-        uses: 'softprops/action-gh-release@v0.1.13'
+        uses: 'softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5'
         env:
           GITHUB_TOKEN: '${{ secrets.REPO_ONLY }}'
         with:
